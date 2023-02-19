@@ -1,0 +1,25 @@
+{
+  "name": "tt-squad-stats-updater",
+  "version": "1.0.0",
+  "description": "A Node process to keep player stats from the TT squad server updated in redis for rapid retrieval",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "author": "z1haze",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "ioredis": "^5.3.0",
+    "knex": "^2.4.2",
+    "lodash-es": "^4.17.21",
+    "mysql2": "^3.1.1",
+    "piscina": "^3.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
