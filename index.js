@@ -18,22 +18,45 @@ async function getServers() {
 }
 
 /**
- * Initialize the players map from the database, stubbing out all player's stats
+ * Get all players from the database
  *
- * @returns {Promise<Map<String, Object.<steamID: String, playerName: String, servers: Array.<{id: String, name: String, kills: Number, deaths: Number, revives: Number, revived: Number, kd: Number, tks: Number, tkd: Number}>>>>}
+ * @returns {Promise<Array.<{steamID: String, playerName: String}>>}
  */
-async function initPlayers() {
+async function getPlayers() {
     const start = Date.now();
-    const playersMap = new Map();
 
-    /**
-     * An array of players from the database
-     * @type {Array.<{steamID: String, playerName: String}>}
-     */
     const players = await db('DBLog_SteamUsers')
         .select('steamID')
         .select('lastName as playerName')
         .whereNotNull('lastName');
+
+    console.log(`getPlayers took ${Date.now() - start}ms`);
+
+    const playerChunks = chunk(players, parseInt(process.env.REDIS_BATCH_SIZE) || 100);
+
+    await Promise.all(
+        playerChunks.map(async (players) => {
+            const pipeline = redis.pipeline();
+
+            players.forEach((player) => {
+                pipeline.hset(CONSTANTS.STEAM_USERS, player.playerName, player.steamID);
+            });
+
+            return pipeline.exec();
+        })
+    );
+
+    return players;
+}
+
+/**
+ * Initialize the players map from the database, stubbing out all player's stats
+ *
+ * @returns {Promise<Map<String, Object.<steamID: String, playerName: String, servers: Array.<{id: String, name: String, kills: Number, deaths: Number, revives: Number, revived: Number, kd: Number, tks: Number, tkd: Number}>>>>}
+ */
+async function initPlayers(players) {
+    const start = Date.now();
+    const playersMap = new Map();
 
     /**
      * Create the empty server stub for each player's stats
@@ -241,12 +264,14 @@ async function run () {
 
     await redis.set('updating', 'true');
 
+    const players = await getPlayers();
+
     /**
      * A Map of stubbed out players objects
      *
      * @type {Map<String, Object<steamID:String, playerName:String, servers:Array<{id: String, name: String, kills: Number, deaths: Number, revives: Number, revived: Number, kd: Number, tks: Number, tkd: Number}>>>}
      */
-    const playersMap = await initPlayers();
+    const playersMap = await initPlayers(players);
 
     /**
      * An array of deaths from the database
