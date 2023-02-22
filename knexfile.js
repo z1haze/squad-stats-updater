@@ -18,7 +18,4 @@ const config = {
     }
 };
 
-export default {
-    development: config,
-    production: {...config}
-};
+export default config;
