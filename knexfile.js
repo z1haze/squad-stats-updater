@@ -19,5 +19,6 @@ const config = {
 };
 
 export default {
-    development: config
+    development: config,
+    production: {...config}
 };
