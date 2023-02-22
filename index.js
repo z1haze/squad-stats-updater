@@ -207,46 +207,29 @@ export async function updatePlayers({playersMap, deaths, revives} = {}) {
                             server.kd = 1;
                         } else {
                             // if they do have kills, and deaths, division calculation to the second digit
-                            server.kd = Number(parseFloat(server.kills / server.deaths).toFixed(2));
+                            server.kd = Number(parseFloat((server.kills / server.deaths).toString()).toFixed(2));
                         }
                     }
                 });
 
-                /**
-                 * Aggregate the player's total kills
-                 * TODO: we aren't using this right now, no point to waste the resources
-                 */
-                const kills = player.servers.reduce((acc, curr) => acc + curr.kills, 0);
+                pipeline.hset(CONSTANTS.PLAYERS_KEY, player.steamID, JSON.stringify(player));
 
                 /**
-                 * Aggregate the player's total deaths
+                 * Aggregate the player's total kills
                  */
+                const kills = player.servers.reduce((acc, curr) => acc + curr.kills, 0);
+                pipeline.zadd(`${CONSTANTS.LEADERBOARD_KEY}:${CONSTANTS.KILLS_KEY}`, kills, player.steamID);
+
+                // /**
+                //  * Aggregate the player's total deaths
+                //  */
                 // const deaths = player.servers.reduce((acc, curr) => acc + curr.deaths, 0);
+                // pipeline.zadd(`${CONSTANTS.LEADERBOARD_KEY}:${CONSTANTS.DEATHS_KEY}`, deaths, player.steamID);
 
                 /**
                  * Aggregate the player's total revives
                  */
                 const revives = player.servers.reduce((acc, curr) => acc + curr.revives, 0);
-
-                /**
-                 * Store the player in redis
-                 */
-                pipeline.hset(CONSTANTS.PLAYERS_KEY, player.steamID, JSON.stringify(player));
-
-                /**
-                 * Add the player to the kills leaderboard
-                 */
-                pipeline.zadd(`${CONSTANTS.LEADERBOARD_KEY}:${CONSTANTS.KILLS_KEY}`, kills, player.steamID);
-
-                /**
-                 * Add the player to the deaths leaderboard
-                 * TODO: we aren't using this right now, no point to waste the resources
-                 */
-                // pipeline.zadd(`${CONSTANTS.LEADERBOARD_KEY}:${CONSTANTS.DEATHS_KEY}`, deaths, player.steamID);
-
-                /**
-                 * Add the player to the revives leaderboard
-                 */
                 pipeline.zadd(`${CONSTANTS.LEADERBOARD_KEY}:${CONSTANTS.REVIVES_KEY}`, revives, player.steamID);
             });
 
