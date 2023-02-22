@@ -214,13 +214,14 @@ export async function updatePlayers({playersMap, deaths, revives} = {}) {
 
                 /**
                  * Aggregate the player's total kills
+                 * TODO: we aren't using this right now, no point to waste the resources
                  */
                 const kills = player.servers.reduce((acc, curr) => acc + curr.kills, 0);
 
                 /**
                  * Aggregate the player's total deaths
                  */
-                const deaths = player.servers.reduce((acc, curr) => acc + curr.deaths, 0);
+                // const deaths = player.servers.reduce((acc, curr) => acc + curr.deaths, 0);
 
                 /**
                  * Aggregate the player's total revives
@@ -239,8 +240,9 @@ export async function updatePlayers({playersMap, deaths, revives} = {}) {
 
                 /**
                  * Add the player to the deaths leaderboard
+                 * TODO: we aren't using this right now, no point to waste the resources
                  */
-                pipeline.zadd(`${CONSTANTS.LEADERBOARD_KEY}:${CONSTANTS.DEATHS_KEY}`, deaths, player.steamID);
+                // pipeline.zadd(`${CONSTANTS.LEADERBOARD_KEY}:${CONSTANTS.DEATHS_KEY}`, deaths, player.steamID);
 
                 /**
                  * Add the player to the revives leaderboard
