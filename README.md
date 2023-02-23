@@ -12,8 +12,6 @@ Ensure you have copied the .env.example file into your project root and populate
 #### Environment Setup:
 
 ```bash
-NODE_ENV=development
-
 DB_HOST=
 DB_PORT=
 DB_USER=
@@ -21,10 +19,11 @@ DB_PASS=
 DB_NAME=
 
 REDIS_HOST=
-REDIS_PORT=
-REDIS_BATCH_SIZE=100
+REDIS_PORT=6379
+REDIS_PASS=
+REDIS_BATCH_SIZE=100#The number of requests sent per pipeline to Redis. Redis recommends batches of 100
 
-UPDATE_INTERVAL=300000
+UPDATE_INTERVAL=300000#5 minutes
 ```
 
 The `UPDATE_INTERVAL` determines how often the update script will execute. This value is in ms. The default value of `300000` corresponds to 5 minutes.
