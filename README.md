@@ -12,6 +12,8 @@ Ensure you have copied the .env.example file into your project root and populate
 #### Environment Setup:
 
 ```bash
+DEBUG=
+
 DB_HOST=
 DB_PORT=
 DB_USER=

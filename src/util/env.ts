@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 export default {
+    DEBUG: process.env.DEBUG === 'true',
     DB_HOST: process.env.DB_HOST || 'localhost',
     DB_PORT: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : null,
     DB_USER: process.env.DB_USER || '',

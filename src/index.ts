@@ -7,7 +7,7 @@ import env from "./util/env";
 import keys from "./util/keys";
 
 async function update () {
-    const start = Date.now();
+    const start = new Date();
 
     await redis.set('updating', 'true');
 
@@ -53,7 +53,7 @@ async function update () {
     await updatePlayers({playersMap, deaths, downs, revives});
     await redis.del('updating');
 
-    console.log(`finished update after ${Date.now() - start}ms`);
+    console.log(`Stats sync started at ${start.toLocaleTimeString()} and took ${Date.now() - start.getTime()}ms`);
 }
 
 (async() => {

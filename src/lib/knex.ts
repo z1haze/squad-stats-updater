@@ -1,17 +1,15 @@
 import knex from 'knex';
-import {chunk, cloneDeep} from 'lodash';
+import {cloneDeep} from 'lodash';
 
 import config from '../knexfile';
-import redis from "./redis";
 import keys from "../util/keys";
 import env from "../util/env";
 
-import {Player, PlayerServer, UpdatePlayersOptions} from "../typings/players";
+import {Player, PlayerServer} from "../typings/players";
 import {Server} from "../typings/server";
 import {Death} from "../typings/death";
 import {Down} from "../typings/down";
 import {Revive} from "../typings/revive";
-import {getPlayerServerRating} from "./player";
 
 const db = knex(config);
 
@@ -27,7 +25,9 @@ export async function getServers() {
         .select('id')
         .select('name');
 
-    console.log(`getServers took ${Date.now() - start}ms`);
+    if (env.DEBUG) {
+        console.log(`getServers took ${Date.now() - start}ms`);
+    }
 
     return servers;
 }
@@ -43,7 +43,9 @@ export async function getPlayers() {
         .select('lastName as name')
         .whereNotNull('lastName');
 
-    console.log(`getPlayers took ${Date.now() - start}ms`);
+    if (env.DEBUG) {
+        console.log(`getPlayers took ${Date.now() - start}ms`);
+    }
 
     return players;
 }
@@ -62,7 +64,9 @@ export async function getDeaths() {
         .select(`${keys.TABLE_DEATHS}.teamkill`)
         .select(`${keys.TABLE_DEATHS}.server`);
 
-    console.log(`getDeaths took ${Date.now() - start}ms`);
+    if (env.DEBUG) {
+        console.log(`getDeaths took ${Date.now() - start}ms`);
+    }
 
     return deaths;
 }
@@ -79,7 +83,9 @@ export async function getDowns() {
         .select(`${keys.TABLE_DOWNS}.attacker`)
         .select(`${keys.TABLE_DOWNS}.server`);
 
-    console.log(`getDowns took ${Date.now() - start}ms`);
+    if (env.DEBUG) {
+        console.log(`getDowns took ${Date.now() - start}ms`);
+    }
 
     return downs;
 }
@@ -97,7 +103,9 @@ export async function getRevives() {
         .select(`${keys.TABLE_REVIVES}.victim`)
         .select(`${keys.TABLE_REVIVES}.server`);
 
-    console.log(`getRevives took ${Date.now() - start}ms`);
+    if (env.DEBUG) {
+        console.log(`getRevives took ${Date.now() - start}ms`);
+    }
 
     return revives;
 }
@@ -130,7 +138,9 @@ export async function initPlayers(players: Player[]) {
         playersMap.set(player.steamId, player);
     });
 
-    console.log(`initPlayers took ${Date.now() - start}ms`);
+    if (env.DEBUG) {
+        console.log(`initPlayers took ${Date.now() - start}ms`);
+    }
 
     return playersMap;
 }

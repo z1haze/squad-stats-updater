@@ -153,7 +153,9 @@ export async function updatePlayers({playersMap, deaths, downs, revives}: Update
     // set key for the last time this operation completed
     await redis.set('lastUpdate', Date.now());
 
-    console.log(`updatePlayers took ${Date.now() - start}ms`);
+    if (env.DEBUG) {
+        console.log(`updatePlayers took ${Date.now() - start}ms`);
+    }
 
     return playersMap;
 }
