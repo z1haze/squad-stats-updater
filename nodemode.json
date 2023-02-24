@@ -1,5 +1,0 @@
-{
-  "watch": ["./index.js"],
-  "ext": "js",
-  "delay": 2
-}
