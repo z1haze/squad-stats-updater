@@ -163,6 +163,8 @@ export async function updatePlayers({playersMap, deaths, downs, revives}: Update
 /**
  * Calculate the 'rating' of an individual player based on their overall contributions
  *
+ * A HUGE thank you to _0_ZERO_0_ https://github.com/TT-ZERO for coming up with this!
+ *
  * @param {PlayerServer} playerServer
  */
 export function getPlayerServerRating(playerServer: PlayerServer) {
