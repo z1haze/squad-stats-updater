@@ -24,6 +24,17 @@ REDIS_PASS=
 REDIS_BATCH_SIZE=100#The number of requests sent per pipeline to Redis. Redis recommends batches of 100
 
 UPDATE_INTERVAL=300000#5 minutes
+
+# different versions of squadjs used  different table naming conventions, this prevents 
+TABLE_DEATHS=
+TABLE_REVIVES=
+TABLE_DOWNS=
+TABLE_PLAYERS=
+TABLE_SERVERS=
+TABLE_MATCHES=
+
+# adds the ability to ignore stats from specific layers that include specific strings, comma separated
+LAYERS_TO_IGNORE=jensens,seed
 ```
 
 The `UPDATE_INTERVAL` determines how often the update script will execute. This value is in ms. The default value of `300000` corresponds to 5 minutes.

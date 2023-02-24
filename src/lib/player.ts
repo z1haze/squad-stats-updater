@@ -158,6 +158,11 @@ export async function updatePlayers({playersMap, deaths, downs, revives}: Update
     return playersMap;
 }
 
+/**
+ * Calculate the 'rating' of an individual player based on their overall contributions
+ *
+ * @param {PlayerServer} playerServer
+ */
 export function getPlayerServerRating(playerServer: PlayerServer) {
     /**
      * players who have less than 1 death after subtracting times they've been team killed have a score of 0
