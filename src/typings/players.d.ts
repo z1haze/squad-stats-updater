@@ -14,6 +14,8 @@ export type PlayerServer = {
     tks: number;
     tkd: number;
     rating: number;
+    avgDeaths: number;
+    avgKills: number;
 }
 
 export type Player = {
@@ -27,4 +29,9 @@ export type UpdatePlayersOptions = {
     deaths: Death[];
     downs: Down[];
     revives: Revive[];
+}
+
+export type AveragePlayerDeath = {
+    steamId: string;
+    amount: string;
 }

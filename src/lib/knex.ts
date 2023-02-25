@@ -5,7 +5,7 @@ import config from '../knexfile';
 import keys from "../util/keys";
 import env from "../util/env";
 
-import {Player, PlayerServer} from "../typings/players";
+import {AveragePlayerDeath, Player, PlayerServer} from "../typings/players";
 import {Server} from "../typings/server";
 import {Death} from "../typings/death";
 import {Down} from "../typings/down";
@@ -72,6 +72,38 @@ export async function getDeaths() {
 }
 
 /**
+ * Get the average deaths for every player
+ */
+export async function getAvgDeathsPerRound() {
+    const start = Date.now();
+
+    const res: AveragePlayerDeath[] = await db.with('cte', qb => {
+        qb
+            .select('d.victim')
+            .countDistinct('d.id as total_deaths')
+            .countDistinct('m.id as total_matches')
+            .from(`${env.TABLE_MATCHES} as m`)
+            .leftJoin(`${env.TABLE_DEATHS} as d`, 'd.match', 'm.id')
+            .whereNotNull('d.victim')
+            .whereNot(function (qb) {
+                env.LAYERS_TO_IGNORE.forEach((term) => {
+                    qb
+                        .whereILike('m.id', `%${term}%`);
+                });
+            })
+            .groupBy('d.victim');
+    })
+        .select('victim as steamId')
+        .select(db.raw('total_deaths / total_matches as amount')).from('cte');
+
+    if (env.DEBUG) {
+        console.log(`getAvgDeathsPerRound took ${Date.now() - start}ms`);
+    }
+
+    return res;
+}
+
+/**
  * Get all downs from the database
  */
 export async function getDowns() {
@@ -130,7 +162,9 @@ export async function initPlayers(players: Player[]) {
         kdr: 0,
         tks: 0,
         tkd: 0,
-        rating: 0
+        rating: 0,
+        avgDeaths: 0,
+        avgKills: 0
     }));
 
     players.forEach((player) => {
