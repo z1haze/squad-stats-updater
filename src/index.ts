@@ -57,6 +57,8 @@ async function update () {
 }
 
 (async() => {
+    await redis.flushall();
+
     setInterval(update, env.UPDATE_INTERVAL);
 
     await update();
