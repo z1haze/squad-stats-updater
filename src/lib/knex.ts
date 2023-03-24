@@ -62,7 +62,8 @@ export async function getDeaths() {
         .select(`${keys.TABLE_DEATHS}.attacker`)
         .select(`${keys.TABLE_DEATHS}.victim`)
         .select(`${keys.TABLE_DEATHS}.teamkill`)
-        .select(`${keys.TABLE_DEATHS}.server`);
+        .select(`${keys.TABLE_DEATHS}.server`)
+        .where(`${keys.TABLE_DEATHS}.server`, '=', 1);
 
     if (env.DEBUG) {
         console.log(`getDeaths took ${Date.now() - start}ms`);
@@ -113,7 +114,9 @@ export async function getDowns() {
         .join(keys.TABLE_MATCHES, `${keys.TABLE_DOWNS}.match`, '=', `${keys.TABLE_MATCHES}.id`)
         .select(`${keys.TABLE_MATCHES}.layer`)
         .select(`${keys.TABLE_DOWNS}.attacker`)
-        .select(`${keys.TABLE_DOWNS}.server`);
+        .select(`${keys.TABLE_DOWNS}.damage`)
+        .select(`${keys.TABLE_DOWNS}.server`)
+        .where(`${keys.TABLE_DOWNS}.server`, '=', 1);
 
     if (env.DEBUG) {
         console.log(`getDowns took ${Date.now() - start}ms`);
@@ -133,7 +136,8 @@ export async function getRevives() {
         .select(`${keys.TABLE_MATCHES}.layer`)
         .select(`${keys.TABLE_REVIVES}.reviver`)
         .select(`${keys.TABLE_REVIVES}.victim`)
-        .select(`${keys.TABLE_REVIVES}.server`);
+        .select(`${keys.TABLE_REVIVES}.server`)
+        .where(`${keys.TABLE_REVIVES}.server`, '=', 1);
 
     if (env.DEBUG) {
         console.log(`getRevives took ${Date.now() - start}ms`);
@@ -163,8 +167,8 @@ export async function initPlayers(players: Player[]) {
         tks: 0,
         tkd: 0,
         rating: 0,
-        avgDeaths: 0,
-        avgKills: 0
+        damage: 0,
+        matches: []
     }));
 
     players.forEach((player) => {

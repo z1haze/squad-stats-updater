@@ -14,8 +14,20 @@ export type PlayerServer = {
     tks: number;
     tkd: number;
     rating: number;
-    avgDeaths: number;
-    avgKills: number;
+    damage: number;
+    matches: PlayerMatch[]
+}
+
+export type PlayerMatch = {
+    id: string;
+    downs: number;
+    kills: number;
+    deaths: number;
+    revives: number;
+    revived: number;
+    tks: number;
+    tkd: number;
+    damage: number
 }
 
 export type Player = {
