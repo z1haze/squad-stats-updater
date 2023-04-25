@@ -187,7 +187,7 @@ export function getPlayerServerRating(playerServer: PlayerServer) {
     const tkdFactor = 1;
     const tkFactor = .5;
 
-    const contributionThreshold = 400;
+    const contributionThreshold = 750;
 
     // uses log10 for now until we figure out how change the base
     // const maxScoringRatio = 10;
