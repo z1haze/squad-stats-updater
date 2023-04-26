@@ -12,7 +12,7 @@ export default {
   REVIVES: 'revives',
   KDR: 'kdr',
   IDR: 'idr',
-  MATCHES: 'matches',
+  MATCHES: 'matchCount',
   TKS: 'tks',
   TKD: 'tkd',
 

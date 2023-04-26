@@ -21,6 +21,8 @@ export default {
   TABLE_SERVERS: process.env.TABLE_SERVERS || '',
   TABLE_MATCHES: process.env.TABLE_MATCHES || '',
 
+  MATCHES_MINIMUM: process.env.MATCHES_MINIMUM ? parseInt(process.env.MATCHES_MINIMUM) : 10,
+
   LAYERS_TO_IGNORE: process.env.LAYERS_TO_IGNORE ? process.env.LAYERS_TO_IGNORE.split(',') : [],
 
   UPDATE_INTERVAL: process.env.UPDATE_INTERVAL ? parseInt(process.env.UPDATE_INTERVAL) : 300000
