@@ -13,6 +13,8 @@ export default {
   KDR: 'kdr',
   IDR: 'idr',
   MATCHES: 'matches',
+  TKS: 'tks',
+  TKD: 'tkd',
 
   TABLE_DEATHS: env.TABLE_DEATHS,
   TABLE_REVIVES: env.TABLE_REVIVES,
