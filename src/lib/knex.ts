@@ -140,6 +140,7 @@ export async function initPlayers(players: Player[]) {
     revives: 0,
     revived: 0,
     kdr: 0,
+    idr: 0,
     tks: 0,
     tkd: 0,
     rating: 0,
