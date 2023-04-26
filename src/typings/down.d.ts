@@ -1,5 +1,8 @@
 export type Down = {
-    attacker: string;
-    server: number;
-    layer:string;
+  attacker: string;
+  victim: string;
+  teamkill: boolean;
+  server: number;
+  layer: string;
+  match: number;
 }
