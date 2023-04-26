@@ -179,13 +179,19 @@ export function getPlayerServerRating(playerServer: PlayerServer) {
 function addDeath(playersMap: Map<string, Player>, death: Death) {
   let serverIndex = null;
 
+  // only add deaths that we want to track
   if (!death.layer || shouldIgnoreLayer(death.layer)) {
+    return;
+  }
+
+  // only add deaths that have both an attacker and a victim
+  if (!death.attacker || !death.victim) {
     return;
   }
 
   const attacker = playersMap.get(death.attacker);
 
-  if (attacker && attacker.servers) {
+  if (attacker?.servers) {
     serverIndex = attacker.servers.findIndex(({id}) => id === death.server);
 
     attacker.servers[serverIndex].matches?.add(death.match);
@@ -199,7 +205,7 @@ function addDeath(playersMap: Map<string, Player>, death: Death) {
 
   const victim = playersMap.get(death.victim);
 
-  if (victim && victim.servers) {
+  if (victim?.servers) {
     if (!serverIndex) {
       serverIndex = victim.servers.findIndex(({id}) => id === death.server);
     }
@@ -223,13 +229,19 @@ function addDeath(playersMap: Map<string, Player>, death: Death) {
 function addDown(playersMap: Map<string, Player>, down: Down) {
   let serverIndex = null;
 
+  // only add down that we want to track
   if (!down.layer || shouldIgnoreLayer(down.layer)) {
+    return;
+  }
+
+  // only add downs that have both an attacker and a victim
+  if (!down.attacker || !down.victim) {
     return;
   }
 
   const attacker = playersMap.get(down.attacker);
 
-  if (attacker && attacker.servers) {
+  if (attacker?.servers) {
     serverIndex = attacker.servers.findIndex(({id}) => id === down.server);
 
     attacker.servers[serverIndex].matches?.add(down.match);
@@ -241,12 +253,13 @@ function addDown(playersMap: Map<string, Player>, down: Down) {
 
   const victim = playersMap.get(down.victim);
 
-  if (victim && victim.servers) {
+  if (victim?.servers) {
     if (!serverIndex) {
       serverIndex = victim.servers.findIndex(({id}) => id === down.server);
-      victim.servers[serverIndex].matches?.add(down.match);
-      victim.servers[serverIndex].falls++;
     }
+
+    victim.servers[serverIndex].matches?.add(down.match);
+    victim.servers[serverIndex].falls++;
   }
 }
 
@@ -257,7 +270,13 @@ function addDown(playersMap: Map<string, Player>, down: Down) {
  * @param revive
  */
 function addRevive(playersMap: Map<string, Player>, revive: Revive) {
+  // only add revives that we want to track
   if (!revive.layer || shouldIgnoreLayer(revive.layer)) {
+    return;
+  }
+
+  // only add revives that have both a reviver and a victim
+  if (!revive.reviver || !revive.victim) {
     return;
   }
 
