@@ -127,9 +127,33 @@ export async function updatePlayers({playersMap, deaths, downs, revives}: Update
           const kills = player.servers.reduce((acc, curr) => acc + curr.kills, 0);
           pipeline.zadd(`${keys.LEADERBOARD}:${keys.KILLS}`, kills, player.steamId);
 
+          // Add player to deaths leaderboard
+          const deaths = player.servers.reduce((acc, curr) => acc + curr.deaths, 0);
+          pipeline.zadd(`${keys.LEADERBOARD}:${keys.DEATHS}`, deaths, player.steamId);
+
+          // Add player to downs leaderboard
+          const downs = player.servers.reduce((acc, curr) => acc + curr.downs, 0);
+          pipeline.zadd(`${keys.LEADERBOARD}:${keys.DOWNS}`, downs, player.steamId);
+
+          // Add player to falls leaderboard
+          const falls = player.servers.reduce((acc, curr) => acc + curr.falls, 0);
+          pipeline.zadd(`${keys.LEADERBOARD}:${keys.FALLS}`, falls, player.steamId);
+
           // Add player to revives leaderboard
           const revives = player.servers.reduce((acc, curr) => acc + curr.revives, 0);
           pipeline.zadd(`${keys.LEADERBOARD}:${keys.REVIVES}`, revives, player.steamId);
+
+          // Add player to k/d leaderboard
+          const kdr = player.servers.reduce((acc, curr) => acc + curr.kdr, 0) / player.servers.length;
+          pipeline.zadd(`${keys.LEADERBOARD}:${keys.KDR}`, kdr, player.steamId);
+
+          // Add player to i/d leaderboard
+          const idr = player.servers.reduce((acc, curr) => acc + curr.idr, 0) / player.servers.length;
+          pipeline.zadd(`${keys.LEADERBOARD}:${keys.KDR}`, idr, player.steamId);
+
+          // Add player to matches played leaderboard
+          const matches = player.servers.reduce((acc, curr) => acc + (curr?.matchCount || 0), 0);
+          pipeline.zadd(`${keys.LEADERBOARD}:${keys.MATCHES}`, matches, player.steamId);
         }
       });
 

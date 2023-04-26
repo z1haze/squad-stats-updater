@@ -6,7 +6,13 @@ export default {
   LEADERBOARD: 'leaderboard',
   RATING: 'rating',
   KILLS: 'kills',
+  DEATHS: 'deaths',
+  DOWNS: 'downs',
+  FALLS: 'falls',
   REVIVES: 'revives',
+  KDR: 'kdr',
+  IDR: 'idr',
+  MATCHES: 'matches',
 
   TABLE_DEATHS: env.TABLE_DEATHS,
   TABLE_REVIVES: env.TABLE_REVIVES,
