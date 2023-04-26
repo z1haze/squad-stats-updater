@@ -78,7 +78,7 @@ export async function updatePlayers({playersMap, deaths, downs, revives}: Update
 
       players.forEach((player) => {
         /**
-         * Set the K/D ratio for each player
+         * Set the K/D, I/D ratios for each player
          */
         player.servers?.map((server) => {
           if (server.kills === 0) {
@@ -90,6 +90,18 @@ export async function updatePlayers({playersMap, deaths, downs, revives}: Update
             } else {
               // if they do have kills, and deaths, division calculation to the second digit
               server.kdr = parseFloat((server.kills / server.deaths).toFixed(1));
+            }
+          }
+
+          if (server.downs === 0) {
+            server.idr = 0;
+          } else {
+            // if they don't have 0 kills, and have 0 deaths, their KD is 1, regardless
+            if (server.deaths === 0) {
+              server.idr = 1;
+            } else {
+              // if they do have kills, and deaths, division calculation to the second digit
+              server.idr = parseFloat((server.downs / server.deaths).toFixed(1));
             }
           }
 

@@ -12,6 +12,7 @@ export type PlayerServer = {
   revives: number;
   revived: number;
   kdr: number;
+  idr: number
   tks: number;
   tkd: number;
   rating: number;
