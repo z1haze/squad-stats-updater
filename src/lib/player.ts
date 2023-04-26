@@ -22,6 +22,16 @@ export async function updatePlayers({playersMap, deaths, downs, revives}: Update
    * Associate each death with a player (victim and attacker)
    */
   for (const death of deaths) {
+    // only add deaths that we want to track
+    if (!death.layer || shouldIgnoreLayer(death.layer)) {
+      continue;
+    }
+
+    // only add deaths that have both an attacker and a victim
+    if (!death.attacker || !death.victim) {
+      continue;
+    }
+
     addDeath(playersMap, death);
   }
 
@@ -29,6 +39,16 @@ export async function updatePlayers({playersMap, deaths, downs, revives}: Update
    * Update each player's deaths, and tks stats
    */
   for (const down of downs) {
+    // only add down that we want to track
+    if (!down.layer || shouldIgnoreLayer(down.layer)) {
+      continue;
+    }
+
+    // only add downs that have both an attacker and a victim
+    if (!down.attacker || !down.victim) {
+      continue;
+    }
+
     addDown(playersMap, down)
   }
 
@@ -36,6 +56,16 @@ export async function updatePlayers({playersMap, deaths, downs, revives}: Update
    * Update each player's revives stats
    */
   for (const revive of revives) {
+    // only add revives that we want to track
+    if (!revive.layer || shouldIgnoreLayer(revive.layer)) {
+      continue;
+    }
+
+    // only add revives that have both a reviver and a victim
+    if (!revive.reviver || !revive.victim) {
+      continue;
+    }
+
     addRevive(playersMap, revive);
   }
 
@@ -179,16 +209,6 @@ export function getPlayerServerRating(playerServer: PlayerServer) {
 function addDeath(playersMap: Map<string, Player>, death: Death) {
   let serverIndex = null;
 
-  // only add deaths that we want to track
-  if (!death.layer || shouldIgnoreLayer(death.layer)) {
-    return;
-  }
-
-  // only add deaths that have both an attacker and a victim
-  if (!death.attacker || !death.victim) {
-    return;
-  }
-
   const attacker = playersMap.get(death.attacker);
 
   if (attacker?.servers) {
@@ -229,16 +249,6 @@ function addDeath(playersMap: Map<string, Player>, death: Death) {
 function addDown(playersMap: Map<string, Player>, down: Down) {
   let serverIndex = null;
 
-  // only add down that we want to track
-  if (!down.layer || shouldIgnoreLayer(down.layer)) {
-    return;
-  }
-
-  // only add downs that have both an attacker and a victim
-  if (!down.attacker || !down.victim) {
-    return;
-  }
-
   const attacker = playersMap.get(down.attacker);
 
   if (attacker?.servers) {
@@ -270,16 +280,6 @@ function addDown(playersMap: Map<string, Player>, down: Down) {
  * @param revive
  */
 function addRevive(playersMap: Map<string, Player>, revive: Revive) {
-  // only add revives that we want to track
-  if (!revive.layer || shouldIgnoreLayer(revive.layer)) {
-    return;
-  }
-
-  // only add revives that have both a reviver and a victim
-  if (!revive.reviver || !revive.victim) {
-    return;
-  }
-
   let serverIndex = null;
 
   const reviver = playersMap.get(revive.reviver);
