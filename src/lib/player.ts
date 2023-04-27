@@ -216,14 +216,14 @@ export function getPlayerServerRating(playerServer: PlayerServer) {
    * each action. E.G. how much is a "kill" worth compared to a "down",
    * compared to a "revive", compared to a "tk", etc.
    */
-  const killFactor = 1;
-  const downFactor = .5;
+  const killFactor = .9;
+  const incapFactor = .6;
   const deathFactor = 1;
-  const reviveFactor = .5;
-  const tkdFactor = 1;
+  const reviveFactor = 1;
+  const fallFactor = .3;
   const tkFactor = .5;
 
-  const contributionThreshold = 750;
+  const contributionThreshold = 4000;
 
   // uses log10 for now until we figure out how change the base
   // const maxScoringRatio = 10;
@@ -235,21 +235,21 @@ export function getPlayerServerRating(playerServer: PlayerServer) {
    *
    * @type {number}
    */
-  const falloff = Math.min(contributionThreshold, (playerServer.kills + playerServer.revives)) / contributionThreshold;
+  const falloff = Math.min(logBase((killFactor * playerServer.kills + reviveFactor + playerServer.revives), contributionThreshold), 1);
 
   /**
    * The top half of the big goofy fraction
    *
    * @type {number}
    */
-  const top = killFactor * playerServer.kills + downFactor * (playerServer.downs - playerServer.kills) + reviveFactor * playerServer.revives;
+  const top = Math.max(killFactor * playerServer.kills + incapFactor * (playerServer.downs - playerServer.kills) + reviveFactor * playerServer.revives, 1);
 
   /**
    * The bottom half of the big goofy fraction
    *
    * @type {number}
    */
-  const bottom = deathFactor * (playerServer.deaths - tkdFactor * playerServer.tkd) + tkFactor * playerServer.tks;
+  const bottom = Math.max(deathFactor * playerServer.deaths + fallFactor * (playerServer.falls - playerServer.deaths) + tkFactor * playerServer.tks, 1);
 
   /**
    * The main calculation for determining score based on logarithmic ratio of positive to negative contributions

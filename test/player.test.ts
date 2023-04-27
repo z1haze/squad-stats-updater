@@ -9,14 +9,14 @@ const playerServer: PlayerServer = {
   name: "test",
   downs: 1, // used
   kills: 1, // used
-  falls: 1,
+  falls: 1, // used
   deaths: 1, // used
   revives: 1, // used
   revived: 1,
   kdr: 1,
   idr: 1,
   tks: 1, // used
-  tkd: 1, // used
+  tkd: 1,
   rating: 1,
   damage: 1,
   matchCount: 1,
@@ -25,18 +25,18 @@ const playerServer: PlayerServer = {
 }
 
 describe("getPlayerServerRating", () => {
-  it("should return a number", async () => {
+  it("should provide a valid rating", async () => {
     const rating = getPlayerServerRating({
       ...playerServer,
-      kills: 883,
-      downs: 1423,
-      deaths: 960,
-      revives: 244,
-      tks: 60,
-      tkd: 9
+      kills: 2500,
+      downs: 3000,
+      deaths: 1400,
+      revives: 750,
+      falls: 2000,
+      tks: 30,
     });
 
-    expect(rating.toFixed(1)).toBe('556.9');
+    expect(rating.toFixed(1)).toBe('635.1');
   });
 });
 
