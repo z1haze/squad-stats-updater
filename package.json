@@ -1,6 +1,6 @@
 {
   "name": "tt-squad-stats-updater",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A Node process to keep player stats from the TT squad server updated in redis for rapid retrieval",
   "main": "dist/index.js",
   "scripts": {
@@ -14,16 +14,16 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.0.3",
-    "express": "^4.18.2",
-    "ioredis": "^5.3.0",
+    "ioredis": "^5.3.2",
     "knex": "^2.4.2",
     "lodash": "^4.17.21",
-    "mysql2": "^3.1.1"
+    "mysql2": "^3.2.4"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.191",
+    "@types/lodash": "^4.14.194",
+    "@types/node": "^18.16.1",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^4.9.5"
+    "typescript": "^5.0.4"
   }
 }
