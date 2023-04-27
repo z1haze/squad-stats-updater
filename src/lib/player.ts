@@ -161,7 +161,7 @@ export async function updatePlayers({playersMap, deaths, downs, revives}: Update
             const tks = player.servers.reduce((acc, curr) => acc + curr.tks, 0);
             pipeline.zadd(`${keys.LEADERBOARD}:${keys.TKS}`, tks, player.steamId);
 
-            // Add player to tks leaderboard
+            // Add player to tkd leaderboard
             const tkd = player.servers.reduce((acc, curr) => acc + curr.tkd, 0);
             pipeline.zadd(`${keys.LEADERBOARD}:${keys.TKD}`, tkd, player.steamId);
           }
