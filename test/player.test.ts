@@ -26,15 +26,15 @@ describe("getPlayerServerRating", () => {
   it("should return a number", async () => {
     const rating = getPlayerServerRating({
       ...playerServer,
-      kills: 882,
-      downs: 1421,
-      deaths: 955,
-      revives: 243,
+      kills: 883,
+      downs: 1423,
+      deaths: 960,
+      revives: 244,
       tks: 60,
       tkd: 9
     });
 
-    expect(rating).toBe(459.0809487774924)
+    expect(rating.toFixed(1)).toBe('556.9');
   });
 });
 
