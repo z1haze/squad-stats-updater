@@ -15,6 +15,8 @@ export default {
   MATCHES: 'matchCount',
   TKS: 'tks',
   TKD: 'tkd',
+  KILL_EFFICIENCY: 'ke',
+  DEATH_EFFICIENCY: 'de',
 
   TABLE_DEATHS: env.TABLE_DEATHS,
   TABLE_REVIVES: env.TABLE_REVIVES,

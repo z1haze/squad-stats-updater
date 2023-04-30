@@ -145,7 +145,9 @@ export async function initPlayers(players: Player[]) {
     tkd: 0,
     rating: 0,
     damage: 0,
-    matches: new Set<number>()
+    matches: new Set<number>(),
+    ke: 0,
+    de: 0
   }));
 
   players.forEach((player) => {

@@ -19,6 +19,8 @@ export type PlayerServer = {
   damage: number;
   matches?: Set<number>;
   matchCount?: number;
+  ke: number;
+  de: number;
 }
 
 export type PlayerMatch = {

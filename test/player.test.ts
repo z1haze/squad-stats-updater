@@ -19,7 +19,9 @@ const playerServer: PlayerServer = {
   tkd: 1, // used
   rating: 1,
   damage: 1,
-  matchCount: 1
+  matchCount: 1,
+  ke: 0,
+  de: 0
 }
 
 describe("getPlayerServerRating", () => {

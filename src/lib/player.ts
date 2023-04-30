@@ -105,6 +105,9 @@ export async function updatePlayers({playersMap, deaths, downs, revives}: Update
             }
           }
 
+          server.ke = server.kills / server.deaths;
+          server.de = server.de / server.falls;
+
           // we're done
           server.rating = getPlayerServerRating(server);
 
@@ -141,9 +144,17 @@ export async function updatePlayers({playersMap, deaths, downs, revives}: Update
             const downs = player.servers.reduce((acc, curr) => acc + curr.downs, 0);
             pipeline.zadd(`${keys.LEADERBOARD}:${keys.DOWNS}`, downs, player.steamId);
 
+            // Add player to kill efficiency leaderboard
+            const ke = kills / downs;
+            pipeline.zadd(`${keys.LEADERBOARD}:${keys.KILL_EFFICIENCY}`, ke, player.steamId);
+
             // Add player to falls leaderboard
             const falls = player.servers.reduce((acc, curr) => acc + curr.falls, 0);
             pipeline.zadd(`${keys.LEADERBOARD}:${keys.FALLS}`, falls, player.steamId);
+
+            // Add player to death efficiency leaderboard
+            const de = deaths / falls;
+            pipeline.zadd(`${keys.LEADERBOARD}:${keys.DEATH_EFFICIENCY}`, de, player.steamId);
 
             // Add player to revives leaderboard
             const revives = player.servers.reduce((acc, curr) => acc + curr.revives, 0);
