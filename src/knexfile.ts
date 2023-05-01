@@ -1,6 +1,7 @@
 import env from "./util/env";
 
 export default {
+  debug: env.DEBUG,
   client: 'mysql2',
   connection: {
     host: env.DB_HOST,

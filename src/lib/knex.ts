@@ -64,7 +64,8 @@ export async function getDeaths() {
     .select(`${keys.TABLE_DEATHS}.teamkill`)
     .select(`${keys.TABLE_DEATHS}.server`)
     .select(`${keys.TABLE_DEATHS}.match`)
-    .where(`${keys.TABLE_DEATHS}.server`, '=', 1);
+    .where(`${keys.TABLE_DEATHS}.time`, '>=', env.SEASON_START)
+    .andWhere(`${keys.TABLE_DEATHS}.server`, '=', 1);
 
   if (env.DEBUG) {
     console.log(`getDeaths took ${Date.now() - start}ms`);
@@ -87,7 +88,9 @@ export async function getDowns() {
     .select(`${keys.TABLE_DOWNS}.damage`)
     .select(`${keys.TABLE_DOWNS}.server`)
     .select(`${keys.TABLE_DOWNS}.match`)
-    .where(`${keys.TABLE_DOWNS}.server`, '=', 1);
+    .where(`${keys.TABLE_DOWNS}.time`, '>=', env.SEASON_START)
+    .andWhere(`${keys.TABLE_DOWNS}.server`, '=', 1)
+
 
   if (env.DEBUG) {
     console.log(`getDowns took ${Date.now() - start}ms`);
@@ -109,7 +112,8 @@ export async function getRevives() {
     .select(`${keys.TABLE_REVIVES}.victim`)
     .select(`${keys.TABLE_REVIVES}.server`)
     .select(`${keys.TABLE_REVIVES}.match`)
-    .where(`${keys.TABLE_REVIVES}.server`, '=', 1);
+    .where(`${keys.TABLE_REVIVES}.time`, '>=', env.SEASON_START)
+    .andWhere(`${keys.TABLE_REVIVES}.server`, '=', 1);
 
   if (env.DEBUG) {
     console.log(`getRevives took ${Date.now() - start}ms`);
