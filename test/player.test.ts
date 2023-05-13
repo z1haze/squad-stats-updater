@@ -16,7 +16,7 @@ const playerServer: PlayerServer = {
   kdr: 1,
   idr: 1,
   tks: 1, // used
-  tkd: 1,
+  tkd: 0, // used
   rating: 1,
   damage: 1,
   matchCount: 1,
@@ -34,6 +34,7 @@ describe("getPlayerServerRating", () => {
       revives: 750,
       falls: 2000,
       tks: 30,
+      tkd: 0
     });
 
     expect(rating.toFixed(1)).toBe('635.1');

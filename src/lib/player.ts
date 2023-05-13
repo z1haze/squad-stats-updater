@@ -89,7 +89,7 @@ export async function updatePlayers({playersMap, deaths, downs, revives}: Update
               server.kdr = 1;
             } else {
               // if they do have kills, and deaths, division calculation to the second digit
-              server.kdr = parseFloat((server.kills / server.deaths).toFixed(1));
+              server.kdr = parseFloat((server.kills / (server.deaths - server.tkd)).toFixed(1));
             }
           }
 
@@ -101,7 +101,7 @@ export async function updatePlayers({playersMap, deaths, downs, revives}: Update
               server.idr = 1;
             } else {
               // if they do have kills, and deaths, division calculation to the second digit
-              server.idr = parseFloat((server.downs / server.deaths).toFixed(1));
+              server.idr = parseFloat((server.downs / (server.deaths - server.tkd)).toFixed(1));
             }
           }
 
@@ -109,7 +109,7 @@ export async function updatePlayers({playersMap, deaths, downs, revives}: Update
           server.ke = Math.min(server.kills / server.downs, 1);
 
           // death efficiency (how often a fall results in a death)
-          server.de = Math.min(server.deaths / server.falls, 1);
+          server.de = Math.min((server.deaths - server.tkd) / server.falls, 1);
 
           // we're done
           server.rating = getPlayerServerRating(server);
@@ -249,7 +249,7 @@ export function getPlayerServerRating(playerServer: PlayerServer) {
    *
    * @type {number}
    */
-  const bottom = Math.max(deathFactor * playerServer.deaths + fallFactor * (playerServer.falls - playerServer.deaths) + tkFactor * playerServer.tks, 1);
+  const bottom = Math.max(deathFactor * (playerServer.deaths - playerServer.tkd) + fallFactor * (playerServer.falls - (playerServer.deaths - playerServer.tkd)) + tkFactor * playerServer.tks, 1);
 
   /**
    * The main calculation for determining score based on logarithmic ratio of positive to negative contributions
