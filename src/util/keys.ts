@@ -10,6 +10,7 @@ export default {
   DOWNS: 'downs',
   FALLS: 'falls',
   REVIVES: 'revives',
+  REVIVED: 'revived',
   KDR: 'kdr',
   IDR: 'idr',
   MATCHES: 'matchCount',

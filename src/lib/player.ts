@@ -163,6 +163,10 @@ export async function updatePlayers({playersMap, deaths, downs, revives}: Update
             const revives = player.servers.reduce((acc, curr) => acc + curr.revives, 0);
             pipeline.zadd(`${keys.LEADERBOARD}:${keys.REVIVES}`, revives, player.steamId);
 
+            // Add player to revives leaderboard
+            const revived = player.servers.reduce((acc, curr) => acc + curr.revived, 0);
+            pipeline.zadd(`${keys.LEADERBOARD}:${keys.REVIVED}`, revived, player.steamId);
+
             // Add player to k/d leaderboard
             const kdr = player.servers.reduce((acc, curr) => acc + curr.kdr, 0) / player.servers.length;
             pipeline.zadd(`${keys.LEADERBOARD}:${keys.KDR}`, kdr, player.steamId);
