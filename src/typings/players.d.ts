@@ -1,18 +1,18 @@
-import {Down} from "./down";
+import {Incap} from "./incap";
 import {Revive} from "./revive";
 import {Death} from "./death";
 
 export type PlayerServer = {
   id: number;
   name: string;
-  downs: number;
+  incaps: number;
   kills: number;
   falls: number;
   deaths: number;
   revives: number;
   revived: number;
   kdr: number;
-  idr: number
+  idr: number;
   tks: number;
   tkd: number;
   rating: number;
@@ -21,19 +21,6 @@ export type PlayerServer = {
   matchCount?: number;
   ke: number;
   de: number;
-}
-
-export type PlayerMatch = {
-  id: string;
-  downs: number;
-  kills: number;
-  falls: number;
-  deaths: number;
-  revives: number;
-  revived: number;
-  tks: number;
-  tkd: number;
-  damage: number
 }
 
 export type Player = {
@@ -45,7 +32,7 @@ export type Player = {
 export type UpdatePlayersOptions = {
   playersMap: Map<string, Player>;
   deaths: Death[];
-  downs: Down[];
+  incaps: Incap[];
   revives: Revive[];
 }
 

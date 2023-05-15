@@ -1,6 +1,6 @@
 import {chunk} from 'lodash';
 
-import {getDeaths, getDowns, getPlayers, getRevives, initPlayers} from "./lib/knex";
+import {getDeaths, getIncaps, getPlayers, getRevives, initPlayers} from "./lib/knex";
 import {updatePlayers} from "./lib/player";
 import redis from "./lib/redis";
 import env from "./util/env";
@@ -35,9 +35,9 @@ async function update() {
   const playersMap = await initPlayers(players);
 
   /**
-   * An array of downs from the database
+   * An array of incaps from the database
    */
-  const downs = await getDowns();
+  const incaps = await getIncaps();
 
   /**
    * An array of deaths from the database
@@ -53,7 +53,7 @@ async function update() {
   /**
    * Update stats for every player in the playersMap
    */
-  await updatePlayers({playersMap, deaths, downs, revives});
+  await updatePlayers({playersMap, deaths, incaps, revives});
 
   /**
    * Clear the updating flag

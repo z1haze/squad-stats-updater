@@ -1,4 +1,4 @@
-export type Down = {
+export type Incap = {
   attacker: string;
   victim: string;
   teamkill: boolean;

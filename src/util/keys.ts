@@ -7,7 +7,7 @@ export default {
   RATING: 'rating',
   KILLS: 'kills',
   DEATHS: 'deaths',
-  DOWNS: 'downs',
+  INCAPS: 'incaps',
   FALLS: 'falls',
   REVIVES: 'revives',
   REVIVED: 'revived',
@@ -21,7 +21,7 @@ export default {
 
   TABLE_DEATHS: env.TABLE_DEATHS,
   TABLE_REVIVES: env.TABLE_REVIVES,
-  TABLE_DOWNS: env.TABLE_DOWNS,
+  TABLE_INCAPS: env.TABLE_INCAPS,
   TABLE_PLAYERS: env.TABLE_PLAYERS,
   TABLE_SERVERS: env.TABLE_SERVERS,
   TABLE_MATCHES: env.TABLE_MATCHES

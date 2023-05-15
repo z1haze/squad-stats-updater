@@ -5,17 +5,17 @@ import redis from "./redis";
 import keys from "../util/keys";
 import {shouldIgnoreLayer} from "../util/helpers";
 import {Death} from "../typings/death";
-import {Down} from "../typings/down";
+import {Incap} from "../typings/incap";
 import {Revive} from "../typings/revive";
 
 /**
  *
  * @param {Map<string, Player>} playersMap
  * @param {Death[]} deaths
- * @param {Down[]} downs
+ * @param {Incap[]} incaps
  * @param {Revive[]} revives
  */
-export async function updatePlayers({playersMap, deaths, downs, revives}: UpdatePlayersOptions) {
+export async function updatePlayers({playersMap, deaths, incaps, revives}: UpdatePlayersOptions) {
   const start = Date.now();
 
   /**
@@ -38,18 +38,18 @@ export async function updatePlayers({playersMap, deaths, downs, revives}: Update
   /**
    * Update each player's deaths, and tks stats
    */
-  for (const down of downs) {
-    // only add down that we want to track
-    if (!down.layer || shouldIgnoreLayer(down.layer)) {
+  for (const incap of incaps) {
+    // only add incap that we want to track
+    if (!incap.layer || shouldIgnoreLayer(incap.layer)) {
       continue;
     }
 
-    // only add downs that have both an attacker and a victim
-    if (!down.attacker || !down.victim) {
+    // only add incaps that have both an attacker and a victim
+    if (!incap.attacker || !incap.victim) {
       continue;
     }
 
-    addDown(playersMap, down)
+    addIncap(playersMap, incap)
   }
 
   /**
@@ -93,7 +93,7 @@ export async function updatePlayers({playersMap, deaths, downs, revives}: Update
             }
           }
 
-          if (server.downs === 0) {
+          if (server.incaps === 0) {
             server.idr = 0;
           } else {
             // if they don't have 0 kills, and have 0 deaths, their KD is 1, regardless
@@ -101,12 +101,12 @@ export async function updatePlayers({playersMap, deaths, downs, revives}: Update
               server.idr = 1;
             } else {
               // if they do have kills, and deaths, division calculation to the second digit
-              server.idr = parseFloat((server.downs / (server.deaths - server.tkd)).toFixed(1));
+              server.idr = parseFloat((server.incaps / (server.deaths - server.tkd)).toFixed(1));
             }
           }
 
-          // kill efficiency (how often a down results in a kill)
-          server.ke = Math.min(server.kills / server.downs, 1);
+          // kill efficiency (how often an incap results in a kill)
+          server.ke = Math.min(server.kills / server.incaps, 1);
 
           // death efficiency (how often a fall results in a death)
           server.de = Math.min((server.deaths - server.tkd) / server.falls, 1);
@@ -143,9 +143,9 @@ export async function updatePlayers({playersMap, deaths, downs, revives}: Update
             const deaths = player.servers.reduce((acc, curr) => acc + curr.deaths, 0);
             pipeline.zadd(`${keys.LEADERBOARD}:${keys.DEATHS}`, deaths, player.steamId);
 
-            // Add player to downs leaderboard
-            const downs = player.servers.reduce((acc, curr) => acc + curr.downs, 0);
-            pipeline.zadd(`${keys.LEADERBOARD}:${keys.DOWNS}`, downs, player.steamId);
+            // Add player to incaps leaderboard
+            const incaps = player.servers.reduce((acc, curr) => acc + curr.incaps, 0);
+            pipeline.zadd(`${keys.LEADERBOARD}:${keys.INCAPS}`, incaps, player.steamId);
 
             // Add player to kill efficiency leaderboard
             const ke = player.servers.reduce((acc, curr) => acc + curr.ke, 0) / player.servers.length;
@@ -217,7 +217,7 @@ export function getPlayerServerRating(playerServer: PlayerServer) {
 
   /**
    * The following variables denote the "weighting factor" for
-   * each action. E.G. how much is a "kill" worth compared to a "down",
+   * each action. E.G. how much is a "kill" worth compared to an "incap",
    * compared to a "revive", compared to a "tk", etc.
    */
   const killFactor = .9;
@@ -246,7 +246,7 @@ export function getPlayerServerRating(playerServer: PlayerServer) {
    *
    * @type {number}
    */
-  const top = Math.max(killFactor * playerServer.kills + incapFactor * (playerServer.downs - playerServer.kills) + reviveFactor * playerServer.revives, 1);
+  const top = Math.max(killFactor * playerServer.kills + incapFactor * (playerServer.incaps - playerServer.kills) + reviveFactor * playerServer.revives, 1);
 
   /**
    * The bottom half of the big goofy fraction
@@ -275,7 +275,7 @@ function logBase(n: number, base: number) {
  * @param playersMap
  * @param death
  */
-function addDeath(playersMap: Map<string, Player>, death: Death) {
+export function addDeath(playersMap: Map<string, Player>, death: Death) {
   let serverIndex = null;
 
   const attacker = playersMap.get(death.attacker);
@@ -310,34 +310,34 @@ function addDeath(playersMap: Map<string, Player>, death: Death) {
 }
 
 /**
- * Associate the provided down object with the respective player's stats
+ * Associate the provided incap object with the respective player's stats
  *
  * @param playersMap
- * @param down
+ * @param incap
  */
-function addDown(playersMap: Map<string, Player>, down: Down) {
+export function addIncap(playersMap: Map<string, Player>, incap: Incap) {
   let serverIndex = null;
 
-  const attacker = playersMap.get(down.attacker);
+  const attacker = playersMap.get(incap.attacker);
 
   if (attacker?.servers) {
-    serverIndex = attacker.servers.findIndex(({id}) => id === down.server);
+    serverIndex = attacker.servers.findIndex(({id}) => id === incap.server);
 
-    attacker.servers[serverIndex].matches?.add(down.match);
+    attacker.servers[serverIndex].matches?.add(incap.match);
 
-    if (!down.teamkill) {
-      attacker.servers[serverIndex].downs++;
+    if (!incap.teamkill) {
+      attacker.servers[serverIndex].incaps++;
     }
   }
 
-  const victim = playersMap.get(down.victim);
+  const victim = playersMap.get(incap.victim);
 
   if (victim?.servers) {
     if (!serverIndex) {
-      serverIndex = victim.servers.findIndex(({id}) => id === down.server);
+      serverIndex = victim.servers.findIndex(({id}) => id === incap.server);
     }
 
-    victim.servers[serverIndex].matches?.add(down.match);
+    victim.servers[serverIndex].matches?.add(incap.match);
     victim.servers[serverIndex].falls++;
   }
 }
@@ -348,7 +348,7 @@ function addDown(playersMap: Map<string, Player>, down: Down) {
  * @param playersMap
  * @param revive
  */
-function addRevive(playersMap: Map<string, Player>, revive: Revive) {
+export function addRevive(playersMap: Map<string, Player>, revive: Revive) {
   let serverIndex = null;
 
   const reviver = playersMap.get(revive.reviver);

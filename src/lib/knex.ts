@@ -5,10 +5,10 @@ import config from '../knexfile';
 import keys from "../util/keys";
 import env from "../util/env";
 
-import {AveragePlayerDeath, Player, PlayerServer} from "../typings/players";
+import {Player, PlayerServer} from "../typings/players";
 import {Server} from "../typings/server";
 import {Death} from "../typings/death";
-import {Down} from "../typings/down";
+import {Incap} from "../typings/incap";
 import {Revive} from "../typings/revive";
 
 const db = knex(config);
@@ -75,28 +75,28 @@ export async function getDeaths() {
 }
 
 /**
- * Get all downs from the database
+ * Get all incaps from the database
  */
-export async function getDowns() {
+export async function getIncaps() {
   const start = Date.now();
 
-  const downs: Down[] = await db(keys.TABLE_DOWNS)
-    .join(keys.TABLE_MATCHES, `${keys.TABLE_DOWNS}.match`, '=', `${keys.TABLE_MATCHES}.id`)
+  const incaps: Incap[] = await db(keys.TABLE_INCAPS)
+    .join(keys.TABLE_MATCHES, `${keys.TABLE_INCAPS}.match`, '=', `${keys.TABLE_MATCHES}.id`)
     .select(`${keys.TABLE_MATCHES}.layer`)
-    .select(`${keys.TABLE_DOWNS}.attacker`)
-    .select(`${keys.TABLE_DOWNS}.victim`)
-    .select(`${keys.TABLE_DOWNS}.damage`)
-    .select(`${keys.TABLE_DOWNS}.server`)
-    .select(`${keys.TABLE_DOWNS}.match`)
-    .where(`${keys.TABLE_DOWNS}.time`, '>=', env.SEASON_START)
-    .andWhere(`${keys.TABLE_DOWNS}.server`, '=', 1)
+    .select(`${keys.TABLE_INCAPS}.attacker`)
+    .select(`${keys.TABLE_INCAPS}.victim`)
+    .select(`${keys.TABLE_INCAPS}.damage`)
+    .select(`${keys.TABLE_INCAPS}.server`)
+    .select(`${keys.TABLE_INCAPS}.match`)
+    .where(`${keys.TABLE_INCAPS}.time`, '>=', env.SEASON_START)
+    .andWhere(`${keys.TABLE_INCAPS}.server`, '=', 1)
 
 
   if (env.DEBUG) {
-    console.log(`getDowns took ${Date.now() - start}ms`);
+    console.log(`getIncaps took ${Date.now() - start}ms`);
   }
 
-  return downs;
+  return incaps;
 }
 
 /**
@@ -137,7 +137,7 @@ export async function initPlayers(players: Player[]) {
   const playerServerStubs: PlayerServer[] = servers.map((server) => ({
     id: server.id,
     name: server.name,
-    downs: 0,
+    incaps: 0,
     kills: 0,
     falls: 0,
     deaths: 0,
