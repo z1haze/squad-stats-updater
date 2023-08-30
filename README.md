@@ -3,7 +3,7 @@
 TT Stats Updater
 ===
 
-> A node process that connects to the squadjs database and periodically syncs player's stats and stores them in redis for realtime retrieval
+> A node process that connects to the squadjs database and periodically syncs player's stats and stores them in redis for realtime retrieval. This process is a companion to the tt-squad-bot project which can be found here [TT Squad Bot](https://github.com/z1haze/tt-squad-bot)
 
 #### The current version of this process tracks the following data:
 
