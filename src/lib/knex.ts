@@ -128,7 +128,7 @@ export async function getRevives() {
  */
 export async function initPlayers(players: Player[]) {
   const start = Date.now();
-  const playersMap = new Map();
+  const playersMap: Map<string, Player> = new Map();
   const servers = await getServers();
 
   /**
