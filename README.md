@@ -7,7 +7,7 @@ TT Stats Updater
 
 #### The current version of this process tracks the following data:
 
-For each player:
+##### For each player:
 
 - Incaps (times they've downed another player)
 - Kills (times a player they've killed has bled out or given up)
@@ -22,7 +22,7 @@ For each player:
 - Matches Played (number of matches that a player has recorded at least one of the aforementioned stats)
 - Rating (Our numerical rating system that attempts to calculate an overall player rating based on the stats we have available to us)
 
-In addition to individual player stats, we also store the following data for leaderboards:
+##### In addition to individual player stats, we also store the following data for leaderboards:
 
 - Games Played
 - Rating
