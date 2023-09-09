@@ -1,5 +1,6 @@
 import knex from 'knex';
 import {cloneDeep} from 'lodash';
+import {performance} from 'perf_hooks';
 
 import config from '../knexfile';
 import keys from "../util/keys";
@@ -19,14 +20,14 @@ export default db;
  * Get all servers from the database
  */
 export async function getServers() {
-  const start = Date.now();
+  const start = performance.now();
 
   const servers: Server[] = await db(env.TABLE_SERVERS)
     .select('id')
     .select('name');
 
   if (env.DEBUG) {
-    console.log(`getServers took ${Date.now() - start}ms`);
+    console.log(`getServers took ${performance.now() - start}ms`);
   }
 
   return servers;
@@ -36,7 +37,7 @@ export async function getServers() {
  * Get all players from the database
  */
 export async function getPlayers() {
-  const start = Date.now();
+  const start = performance.now();
 
   const players: Player[] = await db(keys.TABLE_PLAYERS)
     .select('steamID as steamId')
@@ -44,7 +45,7 @@ export async function getPlayers() {
     .whereNotNull('lastName');
 
   if (env.DEBUG) {
-    console.log(`getPlayers took ${Date.now() - start}ms`);
+    console.log(`getPlayers took ${performance.now() - start}ms`);
   }
 
   return players;
@@ -54,7 +55,7 @@ export async function getPlayers() {
  * Get all deaths from the database
  */
 export async function getDeaths() {
-  const start = Date.now();
+  const start = performance.now();
 
   const deaths: Death[] = await db(keys.TABLE_DEATHS)
     .join(keys.TABLE_MATCHES, `${keys.TABLE_DEATHS}.match`, '=', `${keys.TABLE_MATCHES}.id`)
@@ -68,7 +69,7 @@ export async function getDeaths() {
     .andWhere(`${keys.TABLE_DEATHS}.server`, '=', 1);
 
   if (env.DEBUG) {
-    console.log(`getDeaths took ${Date.now() - start}ms`);
+    console.log(`getDeaths took ${performance.now() - start}ms`);
   }
 
   return deaths;
@@ -78,7 +79,7 @@ export async function getDeaths() {
  * Get all incaps from the database
  */
 export async function getIncaps() {
-  const start = Date.now();
+  const start = performance.now();
 
   const incaps: Incap[] = await db(keys.TABLE_INCAPS)
     .join(keys.TABLE_MATCHES, `${keys.TABLE_INCAPS}.match`, '=', `${keys.TABLE_MATCHES}.id`)
@@ -93,7 +94,7 @@ export async function getIncaps() {
 
 
   if (env.DEBUG) {
-    console.log(`getIncaps took ${Date.now() - start}ms`);
+    console.log(`getIncaps took ${performance.now() - start}ms`);
   }
 
   return incaps;
@@ -103,7 +104,7 @@ export async function getIncaps() {
  * Get all revives from the database
  */
 export async function getRevives() {
-  const start = Date.now();
+  const start = performance.now();
 
   const revives: Revive[] = await db(keys.TABLE_REVIVES)
     .join(keys.TABLE_MATCHES, `${keys.TABLE_REVIVES}.match`, '=', `${keys.TABLE_MATCHES}.id`)
@@ -116,7 +117,7 @@ export async function getRevives() {
     .andWhere(`${keys.TABLE_REVIVES}.server`, '=', 1);
 
   if (env.DEBUG) {
-    console.log(`getRevives took ${Date.now() - start}ms`);
+    console.log(`getRevives took ${performance.now() - start}ms`);
   }
 
   return revives;
@@ -127,7 +128,7 @@ export async function getRevives() {
  * @param {Player[]} players
  */
 export async function initPlayers(players: Player[]) {
-  const start = Date.now();
+  const start = performance.now();
   const playersMap: Map<string, Player> = new Map();
   const servers = await getServers();
 
@@ -167,7 +168,7 @@ export async function initPlayers(players: Player[]) {
   });
 
   if (env.DEBUG) {
-    console.log(`initPlayers took ${Date.now() - start}ms`);
+    console.log(`initPlayers took ${performance.now() - start}ms`);
   }
 
   return playersMap;

@@ -16,7 +16,7 @@ import {Revive} from "../typings/revive";
  * @param {Revive[]} revives
  */
 export async function updatePlayers({playersMap, deaths, incaps, revives}: UpdatePlayersOptions) {
-  const start = Date.now();
+  const start = performance.now();
 
   /**
    * Associate each death with a player (victim and attacker)
@@ -194,7 +194,7 @@ export async function updatePlayers({playersMap, deaths, incaps, revives}: Updat
   await redis.set('lastUpdate', Date.now());
 
   if (env.DEBUG) {
-    console.log(`updatePlayers took ${Date.now() - start}ms`);
+    console.log(`updatePlayers took ${performance.now() - start}ms`);
   }
 
   return playersMap;

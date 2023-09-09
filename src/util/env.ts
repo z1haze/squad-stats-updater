@@ -16,7 +16,7 @@ export default {
 
   TABLE_DEATHS: process.env.TABLE_DEATHS || '',
   TABLE_REVIVES: process.env.TABLE_REVIVES || '',
-  TABLE_INCAPS: process.env.TABLE_INCAPS || '',
+  TABLE_INCAPS: process.env.TABLE_DOWNS || '',
   TABLE_PLAYERS: process.env.TABLE_PLAYERS || '',
   TABLE_SERVERS: process.env.TABLE_SERVERS || '',
   TABLE_MATCHES: process.env.TABLE_MATCHES || '',
