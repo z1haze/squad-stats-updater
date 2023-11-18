@@ -59,7 +59,7 @@ export async function getDeaths() {
 
   const deaths: Death[] = await db(keys.TABLE_DEATHS)
     .join(keys.TABLE_MATCHES, `${keys.TABLE_DEATHS}.match`, '=', `${keys.TABLE_MATCHES}.id`)
-    .select(`${keys.TABLE_MATCHES}.layer`)
+    .select(`${keys.TABLE_MATCHES}.layerClassname as layer`)
     .select(`${keys.TABLE_DEATHS}.attacker`)
     .select(`${keys.TABLE_DEATHS}.victim`)
     .select(`${keys.TABLE_DEATHS}.teamkill`)
@@ -83,7 +83,7 @@ export async function getIncaps() {
 
   const incaps: Incap[] = await db(keys.TABLE_INCAPS)
     .join(keys.TABLE_MATCHES, `${keys.TABLE_INCAPS}.match`, '=', `${keys.TABLE_MATCHES}.id`)
-    .select(`${keys.TABLE_MATCHES}.layer`)
+    .select(`${keys.TABLE_MATCHES}.layerClassname as layer`)
     .select(`${keys.TABLE_INCAPS}.attacker`)
     .select(`${keys.TABLE_INCAPS}.victim`)
     .select(`${keys.TABLE_INCAPS}.damage`)
@@ -108,7 +108,7 @@ export async function getRevives() {
 
   const revives: Revive[] = await db(keys.TABLE_REVIVES)
     .join(keys.TABLE_MATCHES, `${keys.TABLE_REVIVES}.match`, '=', `${keys.TABLE_MATCHES}.id`)
-    .select(`${keys.TABLE_MATCHES}.layer`)
+    .select(`${keys.TABLE_MATCHES}.layerClassname as layer`)
     .select(`${keys.TABLE_REVIVES}.reviver`)
     .select(`${keys.TABLE_REVIVES}.victim`)
     .select(`${keys.TABLE_REVIVES}.server`)
