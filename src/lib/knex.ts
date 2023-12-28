@@ -66,7 +66,7 @@ export async function getDeaths() {
     .select(`${keys.TABLE_DEATHS}.server`)
     .select(`${keys.TABLE_DEATHS}.match`)
     .where(`${keys.TABLE_DEATHS}.time`, '>=', env.SEASON_START)
-    .andWhere(`${keys.TABLE_DEATHS}.server`, '=', 1);
+    .andWhere(`${keys.TABLE_DEATHS}.server`, '=', env.SERVER_ID);
 
   if (env.DEBUG) {
     console.log(`getDeaths took ${performance.now() - start}ms`);
@@ -90,7 +90,7 @@ export async function getIncaps() {
     .select(`${keys.TABLE_INCAPS}.server`)
     .select(`${keys.TABLE_INCAPS}.match`)
     .where(`${keys.TABLE_INCAPS}.time`, '>=', env.SEASON_START)
-    .andWhere(`${keys.TABLE_INCAPS}.server`, '=', 1)
+    .andWhere(`${keys.TABLE_INCAPS}.server`, '=', env.SERVER_ID)
 
 
   if (env.DEBUG) {
@@ -114,7 +114,7 @@ export async function getRevives() {
     .select(`${keys.TABLE_REVIVES}.server`)
     .select(`${keys.TABLE_REVIVES}.match`)
     .where(`${keys.TABLE_REVIVES}.time`, '>=', env.SEASON_START)
-    .andWhere(`${keys.TABLE_REVIVES}.server`, '=', 1);
+    .andWhere(`${keys.TABLE_REVIVES}.server`, '=', env.SERVER_ID);
 
   if (env.DEBUG) {
     console.log(`getRevives took ${performance.now() - start}ms`);
