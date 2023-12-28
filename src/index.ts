@@ -64,6 +64,8 @@ async function update() {
 }
 
 (async () => {
+  console.log(`Starting process...`);
+
   await redis.flushall();
 
   setInterval(update, env.UPDATE_INTERVAL);
