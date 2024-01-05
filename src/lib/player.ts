@@ -1,12 +1,12 @@
-import {Player, PlayerServer, UpdatePlayersOptions} from "../typings/players";
-import {chunk} from "lodash";
-import env from "../util/env";
-import redis from "./redis";
-import keys from "../util/keys";
-import {shouldIgnoreLayer} from "../util/helpers";
-import {Death} from "../typings/death";
-import {Incap} from "../typings/incap";
-import {Revive} from "../typings/revive";
+import { Player, PlayerServer, UpdatePlayersOptions } from '../typings/players';
+import { chunk } from 'lodash';
+import env from '../util/env';
+import redis from './redis';
+import keys from '../util/keys';
+import { shouldIgnoreLayer } from '../util/helpers';
+import { Death } from '../typings/death';
+import { Incap } from '../typings/incap';
+import { Revive } from '../typings/revive';
 
 /**
  *
@@ -49,7 +49,7 @@ export async function updatePlayers({playersMap, deaths, incaps, revives}: Updat
       continue;
     }
 
-    addIncap(playersMap, incap)
+    addIncap(playersMap, incap);
   }
 
   /**
@@ -124,66 +124,52 @@ export async function updatePlayers({playersMap, deaths, incaps, revives}: Updat
         // Add player to redis
         pipeline.hset(keys.STATS, player.steamId, JSON.stringify(player));
 
-        if (player.servers) {
-          // Add player to matches played leaderboard
-          const matches = player.servers.reduce((acc, curr) => acc + (curr?.matchCount || 0), 0);
+        player.servers?.forEach((server) => {
+          if (!server.matchCount) return;
 
-          if (matches >= env.MATCHES_MINIMUM) {
-            pipeline.zadd(`${keys.LEADERBOARD}:${keys.MATCHES}`, matches, player.steamId);
+          if (server.matchCount >= env.MATCHES_MINIMUM) {
+            pipeline.zadd(`${keys.LEADERBOARD}:${server.id}:${keys.MATCHES}`, server.matchCount, player.steamId);
 
             // Add player to ratings leaderboard
-            const rating = player.servers.reduce((acc, curr) => acc + curr.rating, 0) / player.servers.length;
-            pipeline.zadd(`${keys.LEADERBOARD}:${keys.RATING}`, rating, player.steamId);
+            pipeline.zadd(`${keys.LEADERBOARD}:${server.id}:${keys.RATING}`, server.rating, player.steamId);
 
             // Add player to kills leaderboard
-            const kills = player.servers.reduce((acc, curr) => acc + curr.kills, 0);
-            pipeline.zadd(`${keys.LEADERBOARD}:${keys.KILLS}`, kills, player.steamId);
+            pipeline.zadd(`${keys.LEADERBOARD}:${server.id}:${keys.KILLS}`, server.kills, player.steamId);
 
             // Add player to deaths leaderboard
-            const deaths = player.servers.reduce((acc, curr) => acc + curr.deaths, 0);
-            pipeline.zadd(`${keys.LEADERBOARD}:${keys.DEATHS}`, deaths, player.steamId);
+            pipeline.zadd(`${keys.LEADERBOARD}:${server.id}:${keys.DEATHS}`, server.deaths, player.steamId);
 
             // Add player to incaps leaderboard
-            const incaps = player.servers.reduce((acc, curr) => acc + curr.incaps, 0);
-            pipeline.zadd(`${keys.LEADERBOARD}:${keys.INCAPS}`, incaps, player.steamId);
+            pipeline.zadd(`${keys.LEADERBOARD}:${server.id}:${keys.INCAPS}`, server.incaps, player.steamId);
 
             // Add player to kill efficiency leaderboard
-            const ke = player.servers.reduce((acc, curr) => acc + curr.ke, 0) / player.servers.length;
-            pipeline.zadd(`${keys.LEADERBOARD}:${keys.KILL_EFFICIENCY}`, ke, player.steamId);
+            pipeline.zadd(`${keys.LEADERBOARD}:${server.id}:${keys.KILL_EFFICIENCY}`, server.ke, player.steamId);
 
             // Add player to falls leaderboard
-            const falls = player.servers.reduce((acc, curr) => acc + curr.falls, 0);
-            pipeline.zadd(`${keys.LEADERBOARD}:${keys.FALLS}`, falls, player.steamId);
+            pipeline.zadd(`${keys.LEADERBOARD}:${server.id}:${keys.FALLS}`, server.falls, player.steamId);
 
             // Add player to death efficiency leaderboard
-            const de = player.servers.reduce((acc, curr) => acc + curr.de, 0) / player.servers.length;
-            pipeline.zadd(`${keys.LEADERBOARD}:${keys.DEATH_EFFICIENCY}`, de, player.steamId);
+            pipeline.zadd(`${keys.LEADERBOARD}:${server.id}:${keys.DEATH_EFFICIENCY}`, server.de, player.steamId);
 
             // Add player to revives leaderboard
-            const revives = player.servers.reduce((acc, curr) => acc + curr.revives, 0);
-            pipeline.zadd(`${keys.LEADERBOARD}:${keys.REVIVES}`, revives, player.steamId);
+            pipeline.zadd(`${keys.LEADERBOARD}:${server.id}:${keys.REVIVES}`, server.revives, player.steamId);
 
             // Add player to revives leaderboard
-            const revived = player.servers.reduce((acc, curr) => acc + curr.revived, 0);
-            pipeline.zadd(`${keys.LEADERBOARD}:${keys.REVIVED}`, revived, player.steamId);
+            pipeline.zadd(`${keys.LEADERBOARD}:${server.id}:${keys.REVIVED}`, server.revived, player.steamId);
 
             // Add player to k/d leaderboard
-            const kdr = player.servers.reduce((acc, curr) => acc + curr.kdr, 0) / player.servers.length;
-            pipeline.zadd(`${keys.LEADERBOARD}:${keys.KDR}`, kdr, player.steamId);
+            pipeline.zadd(`${keys.LEADERBOARD}:${server.id}:${keys.KDR}`, server.kdr, player.steamId);
 
             // Add player to i/d leaderboard
-            const idr = player.servers.reduce((acc, curr) => acc + curr.idr, 0) / player.servers.length;
-            pipeline.zadd(`${keys.LEADERBOARD}:${keys.IDR}`, idr, player.steamId);
+            pipeline.zadd(`${keys.LEADERBOARD}:${server.id}:${keys.IDR}`, server.idr, player.steamId);
 
             // Add player to tks leaderboard
-            const tks = player.servers.reduce((acc, curr) => acc + curr.tks, 0);
-            pipeline.zadd(`${keys.LEADERBOARD}:${keys.TKS}`, tks, player.steamId);
+            pipeline.zadd(`${keys.LEADERBOARD}:${server.id}:${keys.TKS}`, server.tks, player.steamId);
 
             // Add player to tkd leaderboard
-            const tkd = player.servers.reduce((acc, curr) => acc + curr.tkd, 0);
-            pipeline.zadd(`${keys.LEADERBOARD}:${keys.TKD}`, tkd, player.steamId);
+            pipeline.zadd(`${keys.LEADERBOARD}:${server.id}:${keys.TKD}`, server.tkd, player.steamId);
           }
-        }
+        });
       });
 
       return pipeline.exec();

@@ -1,11 +1,11 @@
 {
   "name": "tt-squad-stats-updater",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "A Node process to keep player stats from the TT squad server updated in redis for rapid retrieval",
   "main": "dist/index.js",
   "engines": {
-    "node": "18.17.1",
-    "npm": "9.6.7"
+    "node": ">=18.17.1",
+    "npm": ">=9.6.7"
   },
   "scripts": {
     "start": "ts-node src/index.ts",
