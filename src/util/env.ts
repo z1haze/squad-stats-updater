@@ -21,8 +21,6 @@ export default {
   TABLE_SERVERS: process.env.TABLE_SERVERS || '',
   TABLE_MATCHES: process.env.TABLE_MATCHES || '',
 
-  SERVER_ID: process.env.SERVER_ID ? parseInt(process.env.SERVER_ID) : 1,
-
   SEASON_START: process.env.SEASON_START || '1970-01-01T00:00:00Z',
 
   MATCHES_MINIMUM: process.env.MATCHES_MINIMUM ? parseInt(process.env.MATCHES_MINIMUM) : 10,
