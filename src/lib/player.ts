@@ -119,10 +119,10 @@ export async function updatePlayers({playersMap, deaths, incaps, revives}: Updat
 
             delete server.matches;
           }
-        });
 
-        // Add player to redis
-        pipeline.hset(keys.STATS, player.steamId, JSON.stringify(player));
+          // Add player stats per server to redis
+          pipeline.hset(`${keys.STATS}:${server.id}`, player.steamId, JSON.stringify(player));
+        });
 
         player.servers?.forEach((server) => {
           if (!server.matchCount) return;
